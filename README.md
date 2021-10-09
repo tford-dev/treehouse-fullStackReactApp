@@ -1,2 +1,2 @@
 # treehouse-fullStackReactApp
-tford-dev/treehouse-fullStackReactApp
+treehouse-fullStackReactApp This is the 10th project of the teamtreehouse full stack javascript course. This is a CRUD app for courses with a fully functional user authorization feature. This app has 2 folders, client and api. Both must be ran with the command npm start in the terminal. As of now, the configuration url to access the api in the client side of the app is 'http://localhost:5000/api'.
