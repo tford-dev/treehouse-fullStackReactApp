@@ -15,6 +15,8 @@ class UpdateCourse extends Component {
             studentLastName: null,
             errors: []
         }
+        this.change = this.change.bind(this);
+        this.submit = this.submit.bind(this);
     }
 
 
@@ -86,7 +88,6 @@ class UpdateCourse extends Component {
                                             type="text" 
                                             onChange={this.change} 
                                             defaultValue={title} 
-                                            required
                                         />
 
                                     <p>
@@ -100,7 +101,6 @@ class UpdateCourse extends Component {
                                             name="description" 
                                             onChange={this.change} 
                                             id="courseDescription"
-                                            required
                                         />
                                     </label>
                                 </div>
@@ -172,25 +172,32 @@ class UpdateCourse extends Component {
         };
 
         //updateCourse method takes credentials from context api and course variable to execute request 
-        context.data.updateCourse(course, 
-            authUser.emailAddress,
-            authUser.password
-            ).then((response) => {
-                if(response === "success"){
-                    console.log(`Username ${authUser.emailAddress} 
-                    successfully updated: course #${id}`);
-                    this.props.history.push(`/courses/${id}`);
-                } else if (response === "forbidden"){
-                    this.props.history.push("/forbidden")
-                } else {
-                    this.setState({errors: [...errors, "Title and description can not be empty!"]})
-                }
-            }
-            )
-            .catch(err => {
-                console.log(err);
-                this.props.history.push("/error");
-            })
+        if (title === "" && description === "" || title === " " && description === " "){
+            this.setState({errors: [...errors, "Title can not be empty!", "Description can not be empty!"]})
+        } else if (title === "" || title === " "){
+            this.setState({errors: [...errors, "Title can not be empty!"]})
+        } else if (description === "" || description === " "){
+            this.setState({errors: [...errors, "Description can not be empty!"]})
+        } else {
+            context.data.updateCourse(course, 
+                authUser.emailAddress,
+                authUser.password
+                ).then((response) => {
+                    if(response === "success"){
+                        console.log(`Username ${authUser.emailAddress} 
+                        successfully updated: course #${id}`);
+                        this.props.history.push(`/courses/${id}`);
+                    } else if (response === "forbidden"){
+                        this.props.history.push("/forbidden")
+                    } else {
+                        this.props.history.push("/error")
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.props.history.push("/error");
+                })
+        }
     }
 
     cancel = () => {
