@@ -102,7 +102,7 @@ export default class UserSignUp extends Component {
         };
 
         //createUser method takes credentials from context api and course variable to execute request 
-        if(emailAddress === "" && (password.length < 8 || password.length > 20) || emailAddress === " " && (password.length< 8 || password.length > 20)){
+        if((emailAddress === "" && (password.length < 8 || password.length > 20)) || (emailAddress === " " && (password.length< 8 || password.length > 20))){
             this.setState({errors: [...errors, "A valid email address is required", "password must be 8-20 characters"]})
         } else if (emailAddress === "" || emailAddress === " "){
             this.setState({errors: [...errors, "A valid email address is required"]})
