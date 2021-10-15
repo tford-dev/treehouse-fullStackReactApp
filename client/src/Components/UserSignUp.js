@@ -89,6 +89,7 @@ export default class UserSignUp extends Component {
             lastName,
             emailAddress,
             password,
+            errors
         } = this.state;
 
         //Variable that contains values from keys in state of this component that will be sent to api
@@ -97,30 +98,38 @@ export default class UserSignUp extends Component {
             lastName,
             emailAddress,
             password,
+            errors
         };
 
-        //updateCourse method takes credentials from context api and course variable to execute request 
-        context.data.createUser(user)
-            .then(errors => {
-                if(errors.length){
-                    this.setState({errors})
-                } else {
-                    context.actions.signIn(emailAddress, password)
-                        .then(() => {
-                            this.props.history.push("/authenticated");
-                        })
-                        console.log(`${emailAddress} is successfully signed up and authorized!`);
-                    }
-            })
-            .catch(err => {
-                console.log(err);
-                this.props.history.push("/error");
-            })
+        //createUser method takes credentials from context api and course variable to execute request 
+        if(emailAddress === "" && (password.length < 8 || password.length > 20) || emailAddress === " " && (password.length< 8 || password.length > 20)){
+            this.setState({errors: [...errors, "A valid email address is required", "password must be 8-20 characters"]})
+        } else if (emailAddress === "" || emailAddress === " "){
+            this.setState({errors: [...errors, "A valid email address is required"]})
+        } else if (password.length < 8 || password.length > 20){
+            this.setState({errors: [...errors, "A valid email address is required"]})
+        } else {
+            context.data.createUser(user)
+                .then(errors => {
+                    if(errors.length){
+                        this.setState({errors})
+                    } else {
+                        context.actions.signIn(emailAddress, password)
+                            .then(() => {
+                                this.props.history.push("/");
+                            })
+                            console.log(`${emailAddress} is successfully signed up and authorized!`);
+                        }
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.props.history.push("/error");
+                })
+        }
     }
 
     cancel = () => {
         this.props.history.push('/');
+        window.location.reload();
     }
-
-  
 }
