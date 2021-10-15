@@ -133,11 +133,11 @@ class CreateCourse extends Component {
         };
 
         //createCourse method takes credentials from context api and course variable to execute request 
-        if (title === "" && description === "" || title === " " && description === " "){
+        if ((title === "" && description === "") || (title === " " && description === " ")){
             this.setState({errors: [...errors, "Title can not be empty!", "Description can not be empty!"]})
-        } else if (title === "" || title === " "){
+        } else if ((title === "") || (title === " ")){
             this.setState({errors: [...errors, "Title can not be empty!"]})
-        } else if (description === "" || description === " "){
+        } else if ((description === "") || (description === " ")){
             this.setState({errors: [...errors, "Description can not be empty!"]})
         } else {
             context.data.createCourse(course, authUser.emailAddress, authUser.password)
