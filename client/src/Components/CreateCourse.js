@@ -132,36 +132,21 @@ class CreateCourse extends Component {
             userId: authUser.userId
         };
 
-        //createCourse method takes credentials from context api and course variable to execute request 
-        if ((title === "" && description === "") || (title === " " && description === " ")){
-            this.setState({errors: [...errors, "Title can not be empty!", "Description can not be empty!"]})
-        } else if ((title === "") || (title === " ")){
-            this.setState({errors: [...errors, "Title can not be empty!"]})
-        } else if ((description === "") || (description === " ")){
-            this.setState({errors: [...errors, "Description can not be empty!"]})
-        } else {
-            context.data.createCourse(course, authUser.emailAddress, authUser.password)
-                .then(errors => {
-                    if(errors.length){
-                        this.setState({errors})
-                    } else {
-                        if(course.title === "" || course.description === ""){
-                            this.setState({
-                                errors: [...this.state.errors, "Title and description can not be empty!"]
-                            });
-                        } else {
-                            console.log(`Username ${authUser.emailAddress} 
-                            successfully created: ${course}`);
-                            this.props.history.push('/');
-                            }
-                        }
-                    }
-                )
-                .catch(err => {
-                    console.log(err);
-                    this.props.history.push("/error");
-                })
-        }
+        context.data.createCourse(course, authUser.emailAddress, authUser.password)
+            .then((response) => {
+                if(response === "success"){
+                    console.log(`Username ${authUser.emailAddress} 
+                    successfully created: ${course}`);
+                    this.props.history.push('/');
+                } else if (response === "forbidden"){
+                    this.props.history.push("/forbidden")
+                } else {
+                    this.setState({errors: [...errors, response]})
+                }
+            }).catch(err => {
+                console.log(err);
+                this.props.history.push("/error");
+            })
     }
 
     cancel = () => {
