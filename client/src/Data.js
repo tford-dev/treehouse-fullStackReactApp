@@ -44,7 +44,7 @@ class Data {
         }
         else if (response.status === 400) {
             return response.json().then(data => {
-                return data.errors;
+                return data.message;
             });
         }
         else {
@@ -88,25 +88,29 @@ class Data {
                 return "success";
             } else if (response.status === 401 || 403) {
                 return "forbidden";
-            } else if (response.status === 400){
-                return "error";
-            } else {
-                throw new Error();
             }
+        } else if (response.status === 400) {
+            return response.json().then(data => {
+                return data.errors;
+            })
         } else {
-            return "error";
+            throw new Error();
         }
     }
 
     //POST request to create a course
     async createCourse(obj, emailAddress, password) {
         const response = await this.api(`/courses`, 'POST', obj, true, {emailAddress, password});
-        if (response.status === 201) {
-            return [];
+        if(obj.title.length > 0 && obj.description.length > 0){
+            if (response.status === 201) {
+                return "success";
+            } else if (response.status === 401 || 403) {
+                return "forbidden";
+            }
         } else if (response.status === 400) {
-            return response.json().then(errors => {
-                return errors
-            });
+            return response.json().then(data => {
+                return data.errors;
+            })
         } else {
             throw new Error();
         }
