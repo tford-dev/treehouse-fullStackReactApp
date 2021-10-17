@@ -102,30 +102,22 @@ export default class UserSignUp extends Component {
         };
 
         //createUser method takes credentials from context api and course variable to execute request 
-        if((emailAddress === "" && (password.length < 8 || password.length > 20)) || (emailAddress === " " && (password.length< 8 || password.length > 20))){
-            this.setState({errors: [...errors, "A valid email address is required", "password must be 8-20 characters"]})
-        } else if (emailAddress === "" || emailAddress === " "){
-            this.setState({errors: [...errors, "A valid email address is required"]})
-        } else if (password.length < 8 || password.length > 20){
-            this.setState({errors: [...errors, "A valid email address is required"]})
-        } else {
-            context.data.createUser(user)
-                .then(errors => {
-                    if(errors.length){
-                        this.setState({errors})
-                    } else {
-                        context.actions.signIn(emailAddress, password)
-                            .then(() => {
-                                this.props.history.push("/");
-                            })
-                            console.log(`${emailAddress} is successfully signed up and authorized!`);
-                        }
-                })
+        context.data.createUser(user)
+            .then(errors => {
+                if(errors.length){
+                    this.setState({errors: [errors]})
+                } else {
+                    context.actions.signIn(emailAddress, password)
+                        .then(() => {
+                            this.props.history.push("/");
+                        })
+                    console.log(`${emailAddress} is successfully signed up and authorized!`);
+                }
+            })
                 .catch(err => {
                     console.log(err);
                     this.props.history.push("/error");
                 })
-        }
     }
 
     cancel = () => {
