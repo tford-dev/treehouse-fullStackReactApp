@@ -9,20 +9,16 @@ const router = express.Router();
 
 //GET route for user authentication
 router.get('/users', authenticateUser, asyncHandler(async (req, res) => {
-      const user = req.currentUser;
-      if(req.body.emailAddress.length > 0 && ((req.body.password.length < 8) || (req.body.password.length > 20))){
-        res.status(200);
-        //json data to display current user's firstname and lastname
-        res.json({
-            userId: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            emailAddress: user.emailAddress,
-            password: user.password
-        });
-      } else {
-        res.status(401).json({message: "Sign-in was unsuccessful"}).end();
-      }
+    const user = req.currentUser;
+    res.status(200);
+    //json data to display current user's firstname and lastname
+    res.json({
+        userId: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        emailAddress: user.emailAddress,
+        password: user.password
+    });
 }));
 
 //POST route to create a new user
