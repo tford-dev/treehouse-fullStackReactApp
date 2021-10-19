@@ -37,7 +37,6 @@ router.post('/users', asyncHandler(async (req, res) => {
       res.location('/');
       //removed code below because project required no content on this post request.
       //.json({ "message": "Account successfully created." });
-      //res.status(400).json({message: ""}).end();
       res.status(201).end(console.log(`New user '${req.body.emailAddress}' successfully created.`));
     } else if (
       ((req.body.firstName.length === 0) && (req.body.lastName.length === 0)) &&
