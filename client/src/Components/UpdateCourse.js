@@ -87,7 +87,7 @@ class UpdateCourse extends Component {
                                             name="title" 
                                             type="text" 
                                             onChange={this.change} 
-                                            defaultValue={title} 
+                                            value={title} 
                                         />
 
                                     <p>
@@ -97,7 +97,7 @@ class UpdateCourse extends Component {
                                     <label htmlFor="description">
                                         Course Description
                                         <textarea 
-                                            defaultValue={description} 
+                                            value={description} 
                                             name="description" 
                                             onChange={this.change} 
                                             id="courseDescription"
@@ -114,13 +114,13 @@ class UpdateCourse extends Component {
                                             name="estimatedTime" 
                                             onChange={this.change} 
                                             type="text" 
-                                            defaultValue={estimatedTime} 
+                                            value={estimatedTime} 
                                         />
 
                                     <label htmlFor="materialsNeeded">
                                         Materials Needed
                                         <textarea 
-                                            defaultValue={materialsNeeded} 
+                                            value={materialsNeeded} 
                                             id="materialsNeeded" 
                                             name="materialsNeeded" 
                                             onChange={this.change} 
@@ -182,7 +182,9 @@ class UpdateCourse extends Component {
                 } else if (response === "forbidden"){
                     this.props.history.push("/forbidden")
                 } else {
-                    this.setState({errors: [...errors, response]})
+                    this.setState(()=>{
+                        return {errors: [...errors, response]}
+                    })
                 }
             })
             .catch(err => {
