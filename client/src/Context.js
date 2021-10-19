@@ -48,8 +48,7 @@ export class Provider extends Component {
         Cookies.set("authenticatedUser", JSON.stringify(user), {expires: 1});
         }
         return user;
-    }
-    
+    } 
     //Simple method that signs out user and removes them from cookies in browser
     signOut = () => {
         this.setState(()=>{
