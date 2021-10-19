@@ -49,7 +49,7 @@ function ErrorsDisplay({ errors }) {
                         </div>
                 </div>
         );
+	errors.length = 0;
 }
-
   return errorsDisplay;
 }
