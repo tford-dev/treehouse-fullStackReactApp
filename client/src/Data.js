@@ -25,13 +25,13 @@ class Data {
     //GET request to retrieve user data
     async getUser(emailAddress, password) {
         const response = await this.api(`/users`, 'GET', null, true, {emailAddress, password});
-        if (response.status === 200) {
+        if (response.status === 401) {
+            return response.json().then(data => {
+                return data.message;
+            })
+        } else if (response.status === 200) {
             return response.json().then(data => data)
-        }
-        else if (response.status === 401) {
-            return null;
-        }
-        else {
+        } else {
             throw new Error();
         }
     }
@@ -101,7 +101,7 @@ class Data {
     //POST request to create a course
     async createCourse(obj, emailAddress, password) {
         const response = await this.api(`/courses`, 'POST', obj, true, {emailAddress, password});
-        if(obj.title.length > 0 && obj.description.length > 0){
+        if(obj.title.length > 1 && obj.description.length > 1){
             if (response.status === 201) {
                 return "success";
             } else if (response.status === 401 || 403) {
