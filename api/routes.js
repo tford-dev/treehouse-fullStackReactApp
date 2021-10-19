@@ -28,7 +28,10 @@ router.post('/users', asyncHandler(async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
     //swapped password for hashedPassword so user-password isn't saved as plain text in database
-    if(req.body.password.length >= 8 && req.body.password.length <= 20){
+    if(
+      ((req.body.firstName.length > 0) && (req.body.lastName.length > 0)) &&
+        (((req.body.password.length >= 8) && (req.body.password.length <= 20)) && (req.body.emailAddress.length > 0))
+    ){
       const user = {firstName: req.body.firstName, lastName: req.body.lastName, emailAddress: req.body.emailAddress, password: hashedPassword};
       await User.create(user);
 
@@ -54,6 +57,8 @@ router.post('/users', asyncHandler(async (req, res) => {
     } else if (((req.body.firstName.length === 0) && (req.body.lastName.length === 0)) && 
     ((req.body.password.length < 8) || (req.body.password.length > 20))){
       res.status(400).json({message: "Please enter a valid first name, last name, and password that is 8-20 characters."}).end();
+    } else if ((req.body.firstName.length === 0) && (req.body.lastName.length === 0)){
+      res.status(400).json({message: "Please enter a first and last name."}).end();
     } else if ((req.body.lastName.length === 0) && 
     ((req.body.password.length < 8) || (req.body.password.length > 20))){
       res.status(400).json({message: "Please enter a valid first name and a password that is 8-20 characters."}).end();
@@ -65,8 +70,6 @@ router.post('/users', asyncHandler(async (req, res) => {
       res.status(400).json({message: "Please enter a valid first name and a password that is 8-20 characters."}).end();
     } else if ((req.body.firstName.length === 0) && (req.body.emailAddress.length === 0)){
       res.status(400).json({message: "Please enter a valid first name and email address."}).end();
-    } else if ((req.body.firstName.length === 0) && (req.body.lastName.length === 0)){
-      res.status(400).json({message: "Please enter a first and last name."}).end();
     } else if (req.body.firstName.length === 0) {
       res.status(400).json({message: "Please enter a first name."}).end();
     } else if (req.body.lastName.length === 0) {
