@@ -37,11 +37,47 @@ router.post('/users', asyncHandler(async (req, res) => {
       res.location('/');
       //removed code below because project required no content on this post request.
       //.json({ "message": "Account successfully created." });
+      //res.status(400).json({message: ""}).end();
       res.status(201).end(console.log(`New user '${req.body.emailAddress}' successfully created.`));
-    } else {
-      res.status(400).json({message: "Error, password must be 8-20 characters."}).end()
+    } else if (
+      ((req.body.firstName.length === 0) && (req.body.lastName.length === 0)) &&
+        ((req.body.password.length === 0) && (req.body.emailAddress.length === 0))
+    ){
+      res.status(400).json({message: "Please make sure valid data is provided to create user."}).end();
+    } else if ((req.body.firstName.length === 0) && (req.body.emailAddress.length === 0) &&
+    ((req.body.password.length < 8) || (req.body.password.length > 20))){
+      res.status(400).json({message: "Please enter a valid first name, email address, and password that is 8-20 characters."}).end();
+    } else if ((req.body.lastName.length === 0) && (req.body.emailAddress.length === 0) &&
+    ((req.body.password.length < 8) || (req.body.password.length > 20))){
+      res.status(400).json({message: "Please enter a valid last name, email address, and password that is 8-20 characters."}).end();
+    } else if (((req.body.firstName.length === 0) && (req.body.lastName.length === 0)) && 
+    (req.body.emailAddress.length === 0)){
+      res.status(400).json({message: "Please enter a valid first name, last name, and email address."}).end();
+    } else if (((req.body.firstName.length === 0) && (req.body.lastName.length === 0)) && 
+    ((req.body.password.length < 8) || (req.body.password.length > 20))){
+      res.status(400).json({message: "Please enter a valid first name, last name, and password that is 8-20 characters."}).end();
+    } else if ((req.body.lastName.length === 0) && 
+    ((req.body.password.length < 8) || (req.body.password.length > 20))){
+      res.status(400).json({message: "Please enter a valid first name and a password that is 8-20 characters."}).end();
+    } else if ((req.body.lastName.length === 0) && (req.body.emailAddress.length === 0)){
+      res.status(400).json({message: "Please enter a valid last name and email address."}).end();
+    } else if((req.body.emailAddress.length === 0) && ((req.body.password.length < 8) || (req.body.password.length > 20))){
+      res.status(400).json({message: "Please enter a valid email address and password that is 8-20 characters"}).end();
+    } else if ((req.body.firstName.length === 0) && ((req.body.password.length < 8) || (req.body.password.length > 20))){
+      res.status(400).json({message: "Please enter a valid first name and a password that is 8-20 characters."}).end();
+    } else if ((req.body.firstName.length === 0) && (req.body.emailAddress.length === 0)){
+      res.status(400).json({message: "Please enter a valid first name and email address."}).end();
+    } else if ((req.body.firstName.length === 0) && (req.body.lastName.length === 0)){
+      res.status(400).json({message: "Please enter a first and last name."}).end();
+    } else if (req.body.firstName.length === 0) {
+      res.status(400).json({message: "Please enter a first name."}).end();
+    } else if (req.body.lastName.length === 0) {
+      res.status(400).json({message: "Please enter a last name."}).end();
+    } else if (req.body.emailAddress.length === 0) {
+      res.status(400).json({message: "Please enter a valid email address."}).end();
+    } else if ((req.body.password.length < 8) || (req.body.password.length > 20)){
+      res.status(400).json({message: "Please enter a password that is 8-20 characters."}).end();
     }
-
   } catch (error) {
     if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
       const errors = error.errors.map(err => err.message);
